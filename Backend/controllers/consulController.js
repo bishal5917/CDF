@@ -18,6 +18,22 @@ exports.getAllConsuls = async (req, res) => {
     })
 }
 
+exports.getSingleConsul = async (req, res) => {
+    const consulFound = await Consul.findById(req.params.id)
+
+    if (!consulFound) {
+        return res.status(500).json({
+            success: false,
+            message: "Not Found"
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        consulFound
+    })
+}
+
 exports.updateConsul = async (req, res) => {
     let consul = await Consul.findById(req.params.id)
 
@@ -37,6 +53,25 @@ exports.updateConsul = async (req, res) => {
     res.status(200).json({
         success: true,
         consul
+    })
+
+}
+
+exports.deleteConsul = async (req, res) => {
+    let consul = await Consul.findById(req.params.id)
+
+    if (!consul) {
+        return res.status(500).json({
+            success: false,
+            message: "Not Found"
+        })
+    }
+
+    await consul.remove()
+
+    res.status(200).json({
+        success: true,
+        message: "Deleted"
     })
 
 }
