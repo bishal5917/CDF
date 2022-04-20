@@ -1,10 +1,14 @@
-const express=require('express')
-const app=express()
+const express = require('express')
+const app = express()
 
 app.use(express.json())
 
-const consuls=require('./routes/consulRoutes')
+const errorMiddleware = require('./middleware/error')
 
-app.use('/api/v1',consuls)
+app.use(errorMiddleware)
 
-module.exports=app
+const consuls = require('./routes/consulRoutes')
+
+app.use('/api/v1', consuls)
+
+module.exports = app

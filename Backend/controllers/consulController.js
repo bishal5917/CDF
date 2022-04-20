@@ -1,4 +1,5 @@
 const Consul = require('../models/consulModel')
+const ErrorHandler = require('../utils/ErrorHandler')
 
 exports.createConsul = async (req, res, next) => {
     const consul = await Consul.create(req.body)
@@ -12,20 +13,21 @@ exports.createConsul = async (req, res, next) => {
 exports.getAllConsuls = async (req, res) => {
     const consulFound = await Consul.find()
 
+    if (!consulFound) {
+        return next(new ErrorHandler("Not Found", 404))
+    }
+
     res.status(200).json({
         success: true,
         consulFound
     })
 }
 
-exports.getSingleConsul = async (req, res) => {
+exports.getSingleConsul = async (req, res, next) => {
     const consulFound = await Consul.findById(req.params.id)
 
     if (!consulFound) {
-        return res.status(500).json({
-            success: false,
-            message: "Not Found"
-        })
+        return next(new ErrorHandler("Product not Found", 404))
     }
 
     res.status(200).json({
