@@ -1,14 +1,15 @@
 const Consul = require('../models/consulModel')
 const ErrorHandler = require('../utils/ErrorHandler')
+const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 
-exports.createConsul = async (req, res, next) => {
+exports.createConsul = catchAsyncErrors(async (req, res, next) => {
     const consul = await Consul.create(req.body)
 
     res.status(201).json({
         success: true,
         consul
     })
-}
+});
 
 exports.getAllConsuls = async (req, res) => {
     const consulFound = await Consul.find()
